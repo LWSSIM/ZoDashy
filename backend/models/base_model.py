@@ -12,7 +12,7 @@ Base = declarative_base()
 
 format = "%Y-%m-%dT%H:%M:%S.%f"
 
-class BaseModel:
+class BaseModel(Base):
     """ BaseModel Class:
             Attributes:
                 id (str): unique id for each instance
@@ -28,8 +28,8 @@ class BaseModel:
     __abstract__ = True
 
     id = Column(String(60), primary_key=True, nullable=False)
-    created_at = Column(DateTime, nullable=False, default=datetime.now())
-    updated_at = Column(DateTime, nullable=False, default=datetime.now())
+    created_at = Column(DateTime, nullable=False, default=datetime.now)
+    updated_at = Column(DateTime, nullable=False, default=datetime.now)
 
 
     def __init__(self, *args, **kwargs):

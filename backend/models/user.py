@@ -24,8 +24,8 @@ class User(BaseModel, Base):
     firstName = Column(String(128), nullable=False)
     lastName = Column(String(128), nullable=False)
     manager = Column(Boolean, default=False)
-    Department_id = relationship("Department", back_ref="users")
-    Employee_id = relationship("Employee", back_ref="users")
+#    Department_id = relationship("Department", back_ref="users")
+#    Employee_id = relationship("Employee", back_ref="users")
 
     def __init__(self, *args, **kwargs):
         """ Init attrs """
