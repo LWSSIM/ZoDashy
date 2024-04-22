@@ -28,6 +28,7 @@ classes = {
 #    "Progress": Progress,
 #    "Document": Document,
 
+
 class DB:
     """ Database connection + orm
             Note:
@@ -37,11 +38,9 @@ class DB:
     __engine = None
     __session = None
 
-
     def __init__(self) -> None:
         """ Init DB engine """
         self.__engine = create_engine(database_url, pool_pre_ping=True)
-
 
     # ORM methods
     def all(self, cls=None):
@@ -63,7 +62,7 @@ class DB:
     def get(self, cls, id):
         """ Return an instance of a class """
         if cls and id:
-            key = cls + '.' + id
+            key = cls.__name__ + '.' + id
             return self.all(cls).get(key)
         return None
 
@@ -76,7 +75,9 @@ class DB:
         """ Reload the database """
         Base.metadata.create_all(self.__engine)
 
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session_factory = sessionmaker(
+            bind=self.__engine, expire_on_commit=False
+        )
         Session = scoped_session(session_factory)
         self.__session = Session
 

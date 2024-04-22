@@ -12,6 +12,7 @@ Base = declarative_base()
 
 format = "%Y-%m-%dT%H:%M:%S.%f"
 
+
 class BaseModel(Base):
     """ BaseModel Class:
             Attributes:
@@ -31,7 +32,6 @@ class BaseModel(Base):
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     updated_at = Column(DateTime, nullable=False, default=datetime.now)
 
-
     def __init__(self, *args, **kwargs):
         """ Init attrs """
 
@@ -40,11 +40,15 @@ class BaseModel(Base):
                 if key != "__class__":
                     setattr(self, key, value)
             if kwargs.get("created_at", None) and type(self.created_at) is str:
-                self.created_at = datetime.strptime(kwargs["created_at"], format)
+                self.created_at = datetime.strptime(
+                    kwargs["created_at"], format
+                )
             else:
                 self.created_at = datetime.now()
             if kwargs.get("updated_at", None) and type(self.updated_at) is str:
-                self.updated_at = datetime.strptime(kwargs["updated_at"], format)
+                self.updated_at = datetime.strptime(
+                    kwargs["updated_at"], format
+                )
             else:
                 self.updated_at = datetime.now()
             if kwargs.get("id", None) is None:
