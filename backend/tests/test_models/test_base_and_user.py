@@ -3,9 +3,9 @@
 
 
 import unittest
-from models.base_model import BaseModel
-from models.user import User
-from models import storage
+from backend.models.base_model import BaseModel
+from backend.models.user import User
+from backend.models import storage
 
 # Note: BaseModel is an __abstract__ class,
 #         so it can't be stored directly in the database

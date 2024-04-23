@@ -77,12 +77,12 @@ class BaseModel(Base):
     def save(self):
         """ Update instance + time stamp """
         self.updated_at = datetime.now()
-        from models import storage
+        from backend.models import storage
         storage.new(self)
         storage.save()
 
     def delete(self):
         """ Delete instance """
-        from models import storage
+        from backend.models import storage
         storage.delete(self)
         storage.save()

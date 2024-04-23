@@ -4,8 +4,10 @@
 """
 
 
-from models.user import User
-from models.base_model import Base
+from backend.models.base_model import Base
+from backend.models.user import User
+from backend.models.company import Company
+from backend.models.department import Department
 from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -19,7 +21,9 @@ database = getenv("POSTGRES_DB")
 database_url = f"postgresql://{db_user}:{password}@{host}/{database}"
 
 classes = {
-     "User": User,
+    "User": User,
+    "Company": Company,
+    "Department": Department
 }
 #    "Department": Department,
 #    "Employee": Employee,

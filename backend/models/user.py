@@ -4,7 +4,7 @@
 """
 
 
-from models.base_model import BaseModel, Base
+from backend.models.base_model import BaseModel, Base
 from hashlib import sha256
 from sqlalchemy import Boolean, Column, String
 from sqlalchemy.orm import relationship
@@ -24,8 +24,11 @@ class User(BaseModel, Base):
     firstName = Column(String(128), nullable=False)
     lastName = Column(String(128), nullable=False)
     manager = Column(Boolean, default=False)
-#    Department_id = relationship("Department", back_ref="users")
-#    Employee_id = relationship("Employee", back_ref="users")
+
+
+    # one_to_many
+    companies = relationship("Company", back_populates="creator")
+    # employees = relationship("Employee", back_populates="")
 
     def __init__(self, *args, **kwargs):
         """ Init attrs """
