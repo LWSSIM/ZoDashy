@@ -25,14 +25,16 @@ class User(BaseModel, Base):
     lastName = Column(String(128), nullable=False)
     manager = Column(Boolean, default=False)
 
-
     # one_to_many
-    companies = relationship("Company", back_populates="creator")
-    # employees = relationship("Employee", back_populates="")
+    companies = relationship(
+        "Company",
+        back_populates="creator",
+        cascade="all, delete-orphan",
+    )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         """ Init attrs """
-        super().__init__(*args, **kwargs)
+        super().__init__(**kwargs)
 
     def __setattr__(self, name, value):
         """ Set password as hash """

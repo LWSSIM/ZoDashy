@@ -32,7 +32,7 @@ class BaseModel(Base):
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     updated_at = Column(DateTime, nullable=False, default=datetime.now)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs) -> None:
         """ Init attrs """
 
         if kwargs:
@@ -58,11 +58,11 @@ class BaseModel(Base):
             self.created_at = datetime.now()
             self.updated_at = self.created_at
 
-    def __str__(self):
+    def __str__(self) -> str:
         """ Return string representation of instance """
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """ Return dictionary representation of instance """
         new_dict = self.__dict__.copy()
         if '_sa_instance_state' in new_dict:
@@ -74,14 +74,14 @@ class BaseModel(Base):
             new_dict.pop('password', None)
         return new_dict
 
-    def save(self):
+    def save(self) -> None:
         """ Update instance + time stamp """
         self.updated_at = datetime.now()
         from backend.models import storage
         storage.new(self)
         storage.save()
 
-    def delete(self):
+    def delete(self) -> None:
         """ Delete instance """
         from backend.models import storage
         storage.delete(self)

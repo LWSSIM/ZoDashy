@@ -8,6 +8,7 @@ from backend.models.base_model import Base
 from backend.models.user import User
 from backend.models.company import Company
 from backend.models.department import Department
+from backend.models.employee import Employee
 from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -23,10 +24,9 @@ database_url = f"postgresql://{db_user}:{password}@{host}/{database}"
 classes = {
     "User": User,
     "Company": Company,
-    "Department": Department
+    "Department": Department,
+    "Employee": Employee
 }
-#    "Department": Department,
-#    "Employee": Employee,
 #    "Attendance": Attendance,
 #    "Leave": Leave,
 #    "Progress": Progress,
@@ -47,8 +47,8 @@ class DB:
         self.__engine = create_engine(database_url, pool_pre_ping=True)
 
     # ORM methods
-    def all(self, cls=None):
-        """ Return all instances of a class """
+    def all(self, cls=None) -> dict:
+        """ Return all instances(objs) of a class(es) """
         instances = {}
         if cls:
             objs = self.__session().query(cls).all()
@@ -63,20 +63,20 @@ class DB:
                     instances[key] = obj
         return instances
 
-    def get(self, cls, id):
+    def get(self, cls, id) -> object:
         """ Return an instance of a class """
         if cls and id:
             key = cls.__name__ + '.' + id
             return self.all(cls).get(key)
         return None
 
-    def count(self, cls=None):
+    def count(self, cls=None) -> int:
         """ Return the number of instances of a class """
         return len(self.all(cls))
 
-    # Session management
-    def reload(self):
-        """ Reload the database """
+    # Session management methods
+    def reload(self) -> None:
+        """ Reload the database with a new session """
         Base.metadata.create_all(self.__engine)
 
         session_factory = sessionmaker(
@@ -85,19 +85,19 @@ class DB:
         Session = scoped_session(session_factory)
         self.__session = Session
 
-    def save(self):
+    def save(self) -> None:
         """ Commit all changes of the current session """
         self.__session.commit()
 
-    def close(self):
+    def close(self) -> None:
         """ Close the database """
         self.__session.remove()
 
-    def new(self, obj):
+    def new(self, obj) -> None:
         """ Add an instance to the session """
         self.__session.add(obj)
 
-    def delete(self, obj=None):
+    def delete(self, obj=None) -> None:
         """ Delete an instance from the session """
         if obj:
             self.__session.delete(obj)

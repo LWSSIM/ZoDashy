@@ -5,7 +5,7 @@
 
 
 from backend.models.base_model import BaseModel, Base
-from sqlalchemy import Column, ForeignKey, String, Text
+from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.orm import relationship
 
 
@@ -24,7 +24,17 @@ class Department(BaseModel, Base):
 
     name = Column(String(128), nullable=False)
     description = Column(String(255))
-    company_id = Column(String(60), ForeignKey('companies.id'))
+    company_id = Column(String(60), ForeignKey('companies.id'), nullable=False)
     manager_id = Column(String(60), ForeignKey('users.id'))
 
+    # many_to_one
     company = relationship("Company", back_populates="departments")
+    # ont_to_many
+    employees = relationship(
+        "Employee",
+        back_populates="department",
+        cascade="all, delete-orphan",
+    )
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)

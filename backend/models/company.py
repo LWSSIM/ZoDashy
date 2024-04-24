@@ -5,7 +5,7 @@
 
 
 from backend.models.base_model import BaseModel, Base
-from sqlalchemy import Column , String, ForeignKey
+from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 
@@ -23,8 +23,11 @@ class Company(BaseModel, Base):
     creator_id = Column(String(60), ForeignKey('users.id'))
 
     creator = relationship("User", back_populates="companies")
-    departments = relationship("Department", back_populates="company")
+    departments = relationship(
+        "Department",
+        back_populates="company",
+        cascade="all, delete-orphan",
+    )
 
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
