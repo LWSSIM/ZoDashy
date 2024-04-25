@@ -9,7 +9,7 @@ from backend.models import storage
 
 # Note: BaseModel is an __abstract__ class,
 #         so it can't be stored directly in the database
-#
+
 # These tests are meant to be run with env vars, see example below:
 #
 # `$ POSTGRES_USER=postrgres POSTGRES_PASSWORD=postgres
