@@ -3,7 +3,8 @@
 
 
 from backend.models.base_model import BaseModel, Base
-from sqlalchemy import BLOB, Column, String, ForeignKey
+from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy.types import LargeBinary
 from sqlalchemy.orm import relationship
 
 
@@ -13,7 +14,7 @@ class Document(BaseModel, Base):
 
     title = Column(String(256), nullable=False)
     description = Column(String(256), nullable=True)
-    content = Column(BLOB, nullable=False)
+    content = Column(LargeBinary, nullable=False)
     department_id = Column(String(60),
                            ForeignKey('departments.id'),
                            nullable=False)

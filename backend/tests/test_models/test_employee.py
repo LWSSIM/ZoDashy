@@ -8,22 +8,42 @@ from backend.models.company import Company
 from backend.models.department import Department
 from backend.models.employee import Employee
 from backend.models import storage
+from faker import Faker
 
 
-user1 = {"firstName": "John",
-         "lastName": "Doe",
-         "email": "John@doe.com",
-         "password": "doe123",
-         "manager": True}
-company1 = {"name": "Company1",
-            "description": "Company1 description"}
-department1 = {"name": "Department1",
-               "description": "Department1 description"}
-employee1 = {"firstName": "John",
-             "lastName": "Doe",
-             "email": "John@doe.com",
-             "phone": "1234567890",
-             "jobTitle": "CEO of things"}
+def fake_user():
+    """ fake model """
+    fake = Faker()
+    return User(
+        userName=fake.user_name(),
+        email=fake.email(),
+        password=fake.password(),
+        name=fake.name(),
+    )
+def fake_company():
+    """ fake model """
+    fake = Faker()
+    return Company(
+        name=fake.company(),
+        description=fake.text(),
+    )
+def fake_department():
+    """ fake model """
+    fake = Faker()
+    return Department(
+        name=fake.company(),
+        description=fake.text(),
+    )
+def fake_employee():
+    """ fake model """
+    fake = Faker()
+    return Employee(
+        firstName=fake.first_name(),
+        lastName=fake.last_name(),
+        email=fake.email(),
+        phone=fake.phone_number()[:20],
+        jobTitle=fake.job(),
+    )
 
 
 class TestEmployee(unittest.TestCase):
@@ -57,10 +77,10 @@ class TestEmployee(unittest.TestCase):
         """
         storage.reload()
 
-        user = User(**user1)
-        company = Company(**company1)
-        department = Department(**department1)
-        employee = Employee(**employee1)
+        user = fake_user()
+        company = fake_company()
+        department = fake_department()
+        employee = fake_employee()
 
         company.creator_id = user.id
         department.company_id = company.id
@@ -81,8 +101,3 @@ class TestEmployee(unittest.TestCase):
                          company.id)
         self.assertEqual(storage.get(Employee, employee.id).department_id,
                          department.id)
-        storage.delete(user)
-        storage.delete(company)
-        storage.delete(department)
-        storage.delete(employee)
-        storage.save()

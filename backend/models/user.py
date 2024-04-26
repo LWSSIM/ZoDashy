@@ -19,10 +19,11 @@ class User(BaseModel, Base):
     """
 
     __tablename__ = 'users'
+
     email = Column(String(128), nullable=False)
     password = Column(String(128), nullable=False)
-    firstName = Column(String(128), nullable=False)
-    lastName = Column(String(128), nullable=False)
+    userName = Column(String(128), nullable=False)
+    name = Column(String(128))
     manager = Column(Boolean, default=False)
 
     # one_to_many

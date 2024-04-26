@@ -9,6 +9,11 @@ from backend.models.user import User
 from backend.models.company import Company
 from backend.models.department import Department
 from backend.models.employee import Employee
+from backend.models.documents import Document
+from backend.models.leave import Leave
+from backend.models.attendance import Attendance
+from backend.models.performance import Performance
+
 from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -18,6 +23,7 @@ db_user = getenv("POSTGRES_USER")
 password = getenv("POSTGRES_PASSWORD")
 host = getenv("POSTGRES_HOST")
 database = getenv("POSTGRES_DB")
+env_type = getenv("ENV_TYPE")
 
 database_url = f"postgresql://{db_user}:{password}@{host}/{database}"
 
@@ -25,12 +31,12 @@ classes = {
     "User": User,
     "Company": Company,
     "Department": Department,
-    "Employee": Employee
+    "Employee": Employee,
+    "Document": Document,
+    "Leave": Leave,
+    "Attendance": Attendance,
+    "Performance": Performance,
 }
-#    "Attendance": Attendance,
-#    "Leave": Leave,
-#    "Progress": Progress,
-#    "Document": Document,
 
 
 class DB:
@@ -45,6 +51,9 @@ class DB:
     def __init__(self) -> None:
         """ Init DB engine """
         self.__engine = create_engine(database_url, pool_pre_ping=True)
+
+        if env_type == "test_db":
+            Base.metadata.drop_all(self.__engine)
 
     # ORM methods
     def all(self, cls=None) -> dict:
@@ -87,7 +96,11 @@ class DB:
 
     def save(self) -> None:
         """ Commit all changes of the current session """
-        self.__session.commit()
+        try:
+            self.__session.commit()
+        except Exception:
+            self.__session.rollback()
+            raise
 
     def close(self) -> None:
         """ Close the database """

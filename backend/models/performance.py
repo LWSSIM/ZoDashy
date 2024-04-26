@@ -3,7 +3,8 @@
 
 
 from backend.models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, Decimal, ForeignKey
+from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy.types import DECIMAL
 from sqlalchemy.orm import relationship
 
 
@@ -12,7 +13,7 @@ class Performance(BaseModel, Base):
     __tablename__ = 'performances'
 
     review = Column(String(256), nullable=True)
-    score = Column(Decimal(5, 2), nullable=False)
+    score = Column(DECIMAL(5, 2), nullable=False)
     employee_id = Column(String(60),
                          ForeignKey('employees.id'),
                          nullable=False)

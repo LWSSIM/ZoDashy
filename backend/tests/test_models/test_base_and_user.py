@@ -6,6 +6,7 @@ import unittest
 from backend.models.base_model import BaseModel
 from backend.models.user import User
 from backend.models import storage
+from faker import Faker
 
 # Note: BaseModel is an __abstract__ class,
 #         so it can't be stored directly in the database
@@ -15,6 +16,17 @@ from backend.models import storage
 # `$ POSTGRES_USER=postrgres POSTGRES_PASSWORD=postgres
 #       POSTGRES_HOST=localhost POSTGRES_DB=postgres
 #           python3 -m unittest discover tests`
+
+
+def fake_user():
+    """ fake model """
+    fake = Faker()
+    return User(
+        userName=fake.user_name(),
+        email=fake.email(),
+        password=fake.password(),
+        name=fake.name(),
+    )
 
 
 class TestMainFunction(unittest.TestCase):
@@ -54,18 +66,9 @@ class TestMainFunction(unittest.TestCase):
         self.assertTrue(count >= 0)
         count = storage.count(User)
         self.assertTrue(count >= 0)
-        user = User(
-            **{
-                'lastName': 'sooma',
-                'firstName': 'gooma',
-                'password': 'poolapo',
-                'manager': True,
-                'email': 'poiula@poolai.com'
-            }
-        )
+        user = fake_user()
         user.save()
         self.assertEqual(storage.count(User), count + 1)
-        user.delete()
 
     def test_basemodel_inheritance(self):
         """ does a model get parent attrs correctly """
@@ -79,16 +82,16 @@ class TestMainFunction(unittest.TestCase):
     def test_user_kwargs(self):
         """ test user with kwargs """
         user_dict = {
-            'lastName': 'sooma',
-            'firstName': 'gooma',
+            'userName': 'sooma',
+            'name': 'gooma',
             'password': 'poolapo',
             'manager': True,
             'email': 'poiula@poolai.com'
         }
 
         user = User(**user_dict)
-        self.assertEqual(user.lastName, 'sooma')
-        self.assertEqual(user.firstName, 'gooma')
+        self.assertEqual(user.userName, 'sooma')
+        self.assertEqual(user.name, 'gooma')
         self.assertTrue(user.manager)
         self.assertEqual(user.email, 'poiula@poolai.com')
         # password should not be in the dict for security reasons
@@ -96,15 +99,12 @@ class TestMainFunction(unittest.TestCase):
 
     def test_user_save_and_delete(self):
         """ test user save """
-        user_dict = {
-            'lastName': 'sooma',
-            'firstName': 'gooma',
-            'password': 'poolapo',
-            'manager': True,
-            'email': 'poiula@poolai.com'
-        }
-
-        user = User(**user_dict)
+        user = fake_user()
+        count = storage.count(User)
         user.save()
+        self.assertEqual(storage.count(User), count + 1)
         self.assertTrue(user.updated_at != user.created_at)
+        self.assertEqual(storage.get(User, user.id), user)
         user.delete()
+        self.assertEqual(storage.count(User), count)
+        self.assertIsNone(storage.get(User, user.id))
