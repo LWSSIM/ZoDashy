@@ -6,7 +6,9 @@
 
 from backend.models.base_model import BaseModel, Base
 from sqlalchemy import Column, Date, String, Time, ForeignKey
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import relationship
+import datetime
 
 
 class Attendance(BaseModel, Base):
@@ -22,5 +24,18 @@ class Attendance(BaseModel, Base):
 
     employee = relationship("Employee", backref="attendance")
 
+    __table_args__ = (UniqueConstraint('date'), )
+
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
+
+    def to_dict(self) -> dict:
+        new = super().to_dict()
+
+        if isinstance(self.date, datetime.date):
+            new.update({'date': self.date.isoformat()})
+        if isinstance(self.check_in, datetime.time):
+            new.update({'check_in': self.check_in.isoformat()})
+        if isinstance(self.check_out, datetime.time):
+            new.update({'check_out': self.check_out.isoformat()})
+        return new

@@ -3,7 +3,7 @@
 
 
 from flask import Flask, jsonify
-from backend.models.api.v1.views import app_views
+from backend.api.v1.views import app_views
 from flask_cors import CORS
 
 
@@ -31,4 +31,4 @@ def page_not_found(error):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, threaded=True)
+    app.run(host="0.0.0.0", port=5000, threaded=True, debug=True)

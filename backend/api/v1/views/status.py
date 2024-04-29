@@ -3,7 +3,7 @@
 
 
 from flask import jsonify
-from backend.models.api.v1.views import app_views
+from backend.api.v1.views import app_views
 from backend.models import storage
 from backend.models.user import User
 from backend.models.company import Company
@@ -12,7 +12,7 @@ from backend.models.employee import Employee
 from backend.models.attendance import Attendance
 from backend.models.leave import Leave
 from backend.models.performance import Performance
-from backend.models.documents import Document
+from backend.models.document import Document
 
 
 @app_views.route('/status', methods=['GET'])

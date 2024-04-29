@@ -2,7 +2,7 @@
 """API For users crud """
 
 
-from backend.models.api.v1.views import app_views
+from backend.api.v1.views import app_views
 from backend.models import storage
 from backend.models.user import User
 from flask import jsonify, request, abort
@@ -66,7 +66,7 @@ def update_user(user_id):
         abort(400, 'Not a JSON')
     for key, value in data.items():
         if key not in ['email', 'password', 'userName', 'name', 'manager']:
-            continue
+            abort(400, 'Invalid key')
         # need to validate email for auth
         setattr(user, key, value)
 

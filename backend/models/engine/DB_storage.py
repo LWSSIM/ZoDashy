@@ -9,7 +9,7 @@ from backend.models.user import User
 from backend.models.company import Company
 from backend.models.department import Department
 from backend.models.employee import Employee
-from backend.models.documents import Document
+from backend.models.document import Document
 from backend.models.leave import Leave
 from backend.models.attendance import Attendance
 from backend.models.performance import Performance
@@ -35,7 +35,7 @@ classes = {
     "Document": Document,
     "Leave": Leave,
     "Attendance": Attendance,
-    "Performance": Performance,
+    "Performance": Performance
 }
 
 
@@ -56,7 +56,7 @@ class DB:
             Base.metadata.drop_all(self.__engine)
 
     # ORM methods
-    def all(self, cls=None) -> dict:
+    def all(self, cls: object = None) -> dict:
         """ Return all instances(objs) of a class(es) """
         instances = {}
         if cls:
@@ -72,14 +72,14 @@ class DB:
                     instances[key] = obj
         return instances
 
-    def get(self, cls, id) -> object:
+    def get(self, cls: object, id: str) -> object:
         """ Return an instance of a class """
         if cls and id:
             key = cls.__name__ + '.' + id
             return self.all(cls).get(key)
         return None
 
-    def count(self, cls=None) -> int:
+    def count(self, cls: object = None) -> int:
         """ Return the number of instances of a class """
         return len(self.all(cls))
 

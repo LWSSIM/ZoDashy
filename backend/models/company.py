@@ -10,7 +10,7 @@ from sqlalchemy.orm import relationship
 
 
 class Company(BaseModel, Base):
-    """ Comany class:
+    """ Company class:
         Users have to create this object first,
         all other models wld be linked to this one
         as their parent either directly on through other objects
@@ -20,7 +20,7 @@ class Company(BaseModel, Base):
 
     name = Column(String(128), nullable=False)
     description = Column(String(255))
-    creator_id = Column(String(60), ForeignKey('users.id'))
+    creator_id = Column(String(60), ForeignKey('users.id'), nullable=False)
 
     creator = relationship("User", back_populates="companies")
     departments = relationship(
