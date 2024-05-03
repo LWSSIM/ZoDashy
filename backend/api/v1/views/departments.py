@@ -61,8 +61,8 @@ def create_department(company_id):
 
     try:
         department.save()
-    except IntegrityError as e:
-        abort(400, str(e))
+    except IntegrityError:
+        abort(400, 'Ivalid data')
     finally:
         return jsonify(department.to_dict()), 201
 
@@ -84,8 +84,8 @@ def update_department(department_id):
 
     try:
         department.save()
-    except IntegrityError as e:
-        abort(400, str(e))
+    except IntegrityError:
+        abort(400, 'Ivalid data')
     finally:
         return jsonify(department.to_dict())
 

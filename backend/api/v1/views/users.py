@@ -49,8 +49,8 @@ def create_user():
             abort(400, 'userName already exists')
     try:
         user.save()
-    except IntegrityError as e:
-        abort(400, str(e))
+    except IntegrityError:
+        abort(400, 'Invalid data')
     finally:
         return jsonify(user.to_dict()), 201
 
@@ -72,8 +72,8 @@ def update_user(user_id):
 
     try:
         user.save()
-    except IntegrityError as e:
-        abort(400, str(e))
+    except IntegrityError:
+        abort(400, 'Invalid data')
     finally:
         return jsonify(user.to_dict())
 

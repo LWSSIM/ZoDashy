@@ -78,8 +78,8 @@ def create_attendance(employee_id):
 
     try:
         attendance.save()
-    except IntegrityError as e:
-        abort(400, str(e))
+    except IntegrityError:
+        abort(400, 'Invalid data')
     finally:
         return jsonify(attendance.to_dict()), 201
 
@@ -159,7 +159,7 @@ def update_attendance(attendance_id):
 
     try:
         attendance.save()
-    except IntegrityError as e:
-        abort(400, str(e))
+    except IntegrityError:
+        abort(400, 'Invalid data')
     finally:
         return jsonify(attendance.to_dict())

@@ -19,7 +19,7 @@ class Document(BaseModel, Base):
                            ForeignKey('departments.id'),
                            nullable=False)
 
-    department = relationship('Department', backref='document')
+    department = relationship('Department', backref='documents')
 
     def __init__(self, **kwargs) -> None:
         """ Initialize the Document instance """

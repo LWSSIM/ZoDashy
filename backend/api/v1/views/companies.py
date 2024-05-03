@@ -10,14 +10,14 @@ from flask import jsonify, request, abort
 from sqlalchemy.exc import IntegrityError
 
 
-@app_views.route('/companies', methods=['GET'])
+@app_views.get('/companies')
 def get_companies():
     """ get all companies in db """
     companies = storage.all(Company)
     return jsonify([company.to_dict() for company in companies.values()])
 
 
-@app_views.route('/companies/<company_id>', methods=['GET'])
+@app_views.get('/companies/<company_id>')
 def get_company(company_id):
     """ get company by id """
     company = storage.get(Company, company_id)
@@ -26,7 +26,7 @@ def get_company(company_id):
     abort(404)
 
 
-@app_views.route('/users/<user_id>/companies', methods=['GET'])
+@app_views.get('/users/<user_id>/companies')
 def get_user_companies(user_id):
     """ get all companies for a user """
     user = storage.get(User, user_id)
@@ -35,7 +35,7 @@ def get_user_companies(user_id):
     return jsonify([company.to_dict() for company in user.companies])
 
 
-@app_views.route('/user/<user_id>/companies', methods=['POST'])
+@app_views.post('/user/<user_id>/companies')
 def create_company(user_id):
     """ create company """
     user = storage.get(User, user_id)
@@ -63,7 +63,7 @@ def create_company(user_id):
         return jsonify(company.to_dict()), 201
 
 
-@app_views.route('/companies/<company_id>', methods=['PUT'])
+@app_views.put('/companies/<company_id>')
 def update_company(company_id):
     """ update company by id """
     company = storage.get(Company, company_id)
@@ -84,7 +84,7 @@ def update_company(company_id):
         return jsonify(company.to_dict())
 
 
-@app_views.route('/companies/<company_id>', methods=['DELETE'])
+@app_views.delete('/companies/<company_id>')
 def delete_company(company_id):
     """ delete company by id """
     company = storage.get(Company, company_id)

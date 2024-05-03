@@ -11,7 +11,7 @@ from sqlalchemy.exc import IntegrityError
 from flask import request, abort, jsonify
 
 
-@app_views.route('/departments/<department_id>/employees', methods=['GET'])
+@app_views.get('/departments/<department_id>/employees')
 def get_dep_employees(department_id):
     """ get all employees by dep id """
     department = storage.get(Department, department_id)
@@ -71,8 +71,8 @@ def create_employee(department_id):
 
     try:
         employee.save()
-    except IntegrityError as e:
-        abort(400, str(e))
+    except IntegrityError:
+        abort(400, 'Invalid data')
     finally:
         return jsonify(employee.to_dict()), 201
 
@@ -84,12 +84,8 @@ def delete_employee(employee_id):
     if not employee:
         abort(404)
 
-    try:
-        employee.delete()
-    except IntegrityError as e:
-        abort(400, str(e))
-    finally:
-        return jsonify({})
+    employee.delete()
+    return jsonify({})
 
 
 @app_views.put('/employees/<employee_id>')
@@ -112,7 +108,7 @@ def update_employee(employee_id):
 
     try:
         employee.save()
-    except IntegrityError as e:
-        abort(400, str(e))
+    except IntegrityError:
+        abort(400, 'Invalid data')
     finally:
         return jsonify(employee.to_dict())
